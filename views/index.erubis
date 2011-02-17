@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nozoki::Japan</title>
+    <style>body   { background: black; text-align: center; }</style>
+    <style>button { position:relative; top:500px; }</style>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/map.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
+  </head>
+  <body>
+    <div>
+      <button id="earthquake"    type="button">Earthquake</button>
+      <button id="hungry"        type="button">Hungry</button>
+      <button id="memolane"      type="button">Memolane</button>
+      <button id="rain"          type="button">rain</button>
+      <button id="ruby"          type="button">Ruby</button>
+      <button id="snow"          type="button">Snow</button>
+      <button id="train_station" type="button">Train Station</button>
+    </div>
+    <canvas id="map" width="<%= Nozoki::DISPLAY_WIDTH %>" height="<%= Nozoki::DISPLAY_HEIGHT %>" />
+    <script>$(document).ready(function(){ /*$.ajaxSetup({ cache: false });*/ Nozoki.init(); })</script>
+  </body>
+</html>
