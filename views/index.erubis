@@ -17,6 +17,9 @@
       <button id="ruby"          type="button">Ruby</button>
       <button id="snow"          type="button">Snow</button>
       <button id="train_station" type="button">Train Station</button>
+      <button id="raise_sea"     type="button">Raise</button>
+      <button id="lower_sea"     type="button">Lower</button>
+      <button id="reset"         type="button">Reset</button>
     </div>
     <canvas id="map" width="<%= Nozoki::DISPLAY_WIDTH %>" height="<%= Nozoki::DISPLAY_HEIGHT %>" />
     <script>$(document).ready(function(){ /*$.ajaxSetup({ cache: false });*/ Nozoki.init(); })</script>

@@ -10,23 +10,30 @@ Nozoki.pixler = function(x, y, r, g, b, a){
 }
 
 Nozoki.map = function(){
+    var seaLevel  = this.seaLevel;
+    var shoreLine =   10;
+    var hillLine  =  250;
+    var treeLine  =  600;
+    var snowLine  = 1800;
+    var peakLine  = 3000;
+
+    var landDither  = 11;
+    var oceanDither = 39;
+
+    var offset    = 0;
+
+    var altitude  = 0;
+    var intensity = 0;
+    var color     = 0;
+
+
     for (var x = 0; x < this.mapImageData.width; x++){
         for (var y = 0; y < this.mapImageData.height; y++){
-            var offset = (x + y * this.canvas.width) * 4;
+            offset = (x + y * this.canvas.width) * 4;
 
-            var altitude  = japan[y][x];
-            var intensity = 0;
-            var color     = []
-
-            var landDither  = 11;
-            var oceanDither = 39;
-
-            var seaLevel  =    0;
-            var shoreLine =   10;
-            var hillLine  =  250;
-            var treeLine  =  600;
-            var snowLine  = 1800;
-            var peakLine  = 3000;
+            altitude  = japan[y][x];
+            intensity = 0;
+            color     = []
 
             if (altitude < seaLevel){cd = 150 - (altitude * -1) / oceanDither;}
             else                    {cd = 25 + altitude / landDither;}
@@ -53,8 +60,11 @@ Nozoki.poll = function(uri){
   });
 }
 
-Nozoki.loc   = function(term) { this.map(); this.poll('loc/' + term); clearInterval(this.interval); }
-Nozoki.pulse = function()     { this.poll('pulse'); }
+Nozoki.loc         = function(term)  { this.map(); this.poll('loc/' + term); clearInterval(this.interval); }
+Nozoki.pulse       = function()      { this.poll('pulse'); }
+Nozoki.setSeaLevel = function(level) { this.seaLevel = level; this.map(); this.pulse(); }
+
+Nozoki.setTermButton = function(id, term){ $(id).click(function(){Nozoki.loc(term)});}
 
 Nozoki.init = function(){
   this.canvas         = document.getElementById('map');
@@ -62,16 +72,23 @@ Nozoki.init = function(){
   this.mapImageData   = this.context.createImageData(this.canvas.width, this.canvas.height);
   this.pixelImageData = this.context.createImageData(1, 1);
   this.pixelData      = this.pixelImageData.data;
-  this.interval       = setInterval("Nozoki.pulse()", 5000);
+  this.interval       = setInterval("Nozoki.pulse()", 60000);
+  this.seaLevel       = 0;
+  this.people         = {};
 
   this.map();
   this.pulse();
 
-  $('#earthquake').click(function()   {Nozoki.loc('地震')});
-  $('#hungry').click(function()       {Nozoki.loc('腹')});
-  $('#memolane').click(function()     {Nozoki.loc('memolane')});
-  $('#rain').click(function()         {Nozoki.loc('雨')});
-  $('#ruby').click(function()         {Nozoki.loc('ruby')});
-  $('#snow').click(function()         {Nozoki.loc('雪')});
-  $('#train_station').click(function(){Nozoki.loc('駅')});
+  this.setTermButton('#earthquake',    '地震');
+  this.setTermButton('#hungry',        '腹');
+  this.setTermButton('#memolane',      'memolane');
+  this.setTermButton('#rain',          '雨');
+  this.setTermButton('#ruby',          'ruby');
+  this.setTermButton('#snow',          '雪');
+  this.setTermButton('#train_station', '駅');
+
+  $('#raise_sea').click(function(){Nozoki.setSeaLevel(Nozoki.seaLevel + 100)});
+  $('#lower_sea').click(function(){Nozoki.setSeaLevel(Nozoki.seaLevel - 100)});
+  $('#reset').click(function(){Nozoki.setSeaLevel(0); Nozoki.map(); Nozoki.pulse(); });
+
 }
